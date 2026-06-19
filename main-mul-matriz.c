@@ -7,59 +7,38 @@
 #include <time.h>
 #include <math.h>
 #include <sys/time.h>
-/**
- * \brief Dispara cronometro.
- */
-#define START_STOPWATCH( prm ) {                                        \
-   gettimeofday( &prm.mStartTime, 0);                                   \
-}
 
-/**
-  * \brief Para cronometro.
-  *        retorna em segundos
-  *        para retornar em ms basta remover a linha 42 :)
-  */
+/*SE QUISER FAZER MOSTRAR O TEMPO EM MS, TIRA A LINHA 18*/
+
+#define START_STOPWATCH( prm ) {gettimeofday( &prm.mStartTime, 0);} //relogio comeca a contar
+
 #define STOP_STOPWATCH( prm ) {                                                        \
-  gettimeofday( &prm.mEndTime, 0);                                                     \
+  gettimeofday( &prm.mEndTime, 0); /*pega o horario exato q parou*/                                                    \
   prm.mElapsedTime = (1000.0f * ( prm.mEndTime.tv_sec - prm.mStartTime.tv_sec) + (0.001f * (prm.mEndTime.tv_usec - prm.mStartTime.tv_usec)) );  \
   prm.mElapsedTime /= 1000.0f;                                                         \
-}
-#define EPSILON 1E-30
-#define ALING 64
-/**
- * \brief Estrutura para tratar cronometro.
- */
+}// relogio para de contar e ve quanto tempo se passou
+
 typedef struct
 {
   struct timeval mStartTime;
   struct timeval mEndTime;
   double mElapsedTime;
-} Stopwatch;
+} Stopwatch; //estrutura do cronometro
+
+#define EPSILON 1E-30
+#define ALING 64
 
 typedef struct {
     int n, m;
     double *vetor;
-}Matrix;
+}MATRIZ;
 
-/**
- *
- * Função para gravar vetores e matrizes no formato binário.
- * @param *A estrutura de matriz para ser gravada em disco.
- * @param *filename nome do arquivo binário.
- * @return Quantidade de bytes lidos;
- *
- * */
-size_t saveBinary(Matrix *A, char * filename);
+//ASSINATURAS DAS FUNCOES
 
-/**
- *
- * Função para recuperar vetores e matrizes no formato binário.
- * @param *A estrutura de matriz usada para armazenar a matriz ou vetor.
- * @param *filename nome do arquivo binário.
- * @return Quantidade de bytes lidos;
- *
- * */
-size_t loadBinary(Matrix *A, char *filename);
+size_t saveBin(MATRIZ *A, char * nomeArqv); //grava vet e matrizes no formato bin, *A estrutura de matriz que vai ser gravada em disco, nomeArqv nome do arquivobinario e return qtd bytes lidos
+
+size_t loadBin(MATRIZ *A, char nomeArqv); //size-t é um tipo especifico para tamanhos em c
+
 
 /**
  *
@@ -70,13 +49,11 @@ size_t loadBinary(Matrix *A, char *filename);
  * @param *elapsedtime Vetor para armazenar o tempo de execução de cada thread. Apenas para fins didáticos.
  * @param nThreads quantidade de threadas. Apenas para fins didáticos.
  * @return Quantidade de bytes lidos;
- *
- * */
-void matrix_multi(Matrix *  __restrict__ C,
-                  Matrix *  __restrict__ A,
-                  Matrix *  __restrict__ B,
-                  double * __restrict__ elapsedtime,
-                  unsigned int nThreads){
+*/
+void matrix_multi(MATRIZ *  __restrict__ C, //endereco da memoria da matriz resultado
+                  MATRIZ *  __restrict__ A, //endereco da memoria da matriz A
+                  MATRIZ *  __restrict__ B, //endereco da memoria da matriz B
+                  unsigned int nThreads){ /*parei aqui*/
 
      #pragma omp parallel 
      {
